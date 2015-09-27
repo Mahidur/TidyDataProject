@@ -1,4 +1,4 @@
-# TidyDataProject
+ TidyDataProject
 Getting and Cleaning Data, Course Project 
 This repo explains how all of the scripts work and how they are connected.  
 "run_analysis.R" is the name of the R script consisting of 41 lines of codes
