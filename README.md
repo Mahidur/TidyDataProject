@@ -1,10 +1,18 @@
  TidyDataProject
 Getting and Cleaning Data, Course Project 
 This repo explains how all of the scripts work and how they are connected.  
-"run_analysis.R" is the name of the R script consisting of 41 lines of codes
+
+The data was downloaded and unzipped as follows
+if (!file.exists("Projtidy")) {dir.create("Projtidy")}
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip" 
+download.file(fileUrl, destfile = "./Projtidy/FUCI.zip", method = "curl")
+unzip("FUCI.zip", exdir =".", unzip = "internal", setTimes = TRUE)
+dir()
+
+"run_analysis.R" is the name of the R script consisting of 41 lines of codes as follows
 
 run_analysis <- function() {   ## name of the sript that
-  library(dplyr)              ## loads the packages "dplyr", "tidyr", "plyr" which will be used at different stages                                    of the script
+  library(dplyr)               ## loads the packages "dplyr", "tidyr", "plyr" which will be used at different stages                                    of the script
   library(tidyr)
   library(plyr)
   c1 = read.table('subject_test.txt') ## c1, c2, and c3 loads the tables "subject_test", "y_test", and "X_test"                                                  respectively
