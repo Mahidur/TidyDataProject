@@ -1,0 +1,39 @@
+run_analysis <- function() {
+  library(dplyr)
+  library(tidyr)
+  library(plyr)
+              c1 = read.table('subject_test.txt')
+              c2 = read.table('y_test.txt')
+              c3 = read.table('X_test.txt')
+          testdf <- cbind(c1, c2, c3) 
+              d1 = read.table('subject_train.txt')
+              d2 = read.table('y_train.txt')
+              d3 = read.table('X_train.txt')
+          traindf <- cbind(d1, d2, d3) 
+          combinedf <- rbind(testdf, traindf) 
+          asdfcombinedf <- as.data.frame(combinedf)
+                  f1 = read.table('features.txt')
+                      f1df <- as.data.frame(f1[,2])
+                        f1transposdf <- t(f1df) 
+          names <- c("Subject_ID", "Activity_type") 
+                    namesdf <- t(data.frame(names)) 
+                        completenames <- cbind(namesdf, f1transposdf) 
+          colnames(asdfcombinedf) <- completenames[,1:563] 
+          		Extractmean<- asdfcombinedf[grep("mean", colnames(asdfcombinedf))]
+          		Extractstd<- asdfcombinedf[grep("std", colnames(asdfcombinedf))]
+          		subjectactivitydf <- asdfcombinedf[ , 1:2] 
+          subactmeanstd <- cbind(subjectactivitydf, Extractmean, Extractstd)                       
+          				f2 = read.table('activity_labels.txt') 
+    	  subactmeanstd$Activity_type <- f2[,2][match(subactmeanstd$Activity_type, f2[,1])]                              
+    	  		names(subactmeanstd) <- gsub("BodyBody", "Body", names(subactmeanstd))
+          		names(subactmeanstd) <- gsub("Acc", "Acceleration", names(subactmeanstd))
+          		names(subactmeanstd) <- gsub("mean", "MeanValue", names(subactmeanstd))
+          		names(subactmeanstd) <- gsub("Mag", "Magnitude", names(subactmeanstd))
+          		names(subactmeanstd) <- gsub("std", "StandardDeviation", names(subactmeanstd))
+          		names(subactmeanstd) <- gsub("\\(\\)", "", names(subactmeanstd))
+                      compdata1 <- arrange(subactmeanstd, -desc(Subject_ID))
+              		  compdata2 <- group_by(compdata1, Activity_type)
+              tidydata <- compdata1 %>% group_by(Subject_ID, Activity_type) %>% summarise_each(funs(mean))
+              		write.table(tidydata,"tidydata.txt") ## completes step 5
+    tidydata
+    }
